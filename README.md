@@ -52,21 +52,33 @@ Cafe Finder helps you discover the best cafes across Jaipur, Delhi, and Gurgaon.
 
 ## 📸 Screenshots
 
-### Homepage - Browse Cafes
-![Homepage]()
-*Add screenshot showing city dropdown and cafe list with ratings*
+### 1. Homepage
+![Homepage](static/images/homepage.png)
+*Main homepage with cafe discovery interface*
 
-### Cafe Details Page
-![Cafe Details]()
-*Add screenshot showing detailed cafe information and reviews*
+### 2. City Dropdown Selection
+![City Dropdown](static/images/city-dropdown.png)
+*Select from Jaipur, Delhi, or Gurgaon to filter cafes*
 
-### Review System
-![Reviews]()
-*Add screenshot showing review form and voting system*
+### 3. All Cafes List
+![All Cafes List](static/images/all-cafes-list.png)
+*Complete list of cafes with ratings and action buttons*
 
-### Admin Panel
-![Admin Panel]()
-*Add screenshot showing the edit interface for managing cafes*
+### 4. Manage Cafe - Adding New Cafe
+![Add New Cafe](static/images/manage-cafe-adding.png)
+*Admin panel form for adding new cafes to the database*
+
+### 5. Edit Existing Cafe
+![Edit Cafe](static/images/edit-cafe.png)
+*Inline editing interface for updating cafe information*
+
+### 6. Cafe Detail Page
+![Cafe Details](static/images/cafe-page.png)
+*Individual cafe page with ratings, location, and Google Maps link*
+
+### 7. Reviews Section
+![Reviews](static/images/reviews.png)
+*Customer reviews with vote counts and submission form*
 
 ---
 
@@ -137,9 +149,6 @@ Cafe Finder helps you discover the best cafes across Jaipur, Delhi, and Gurgaon.
 5. Sort by name or rating using the sort dropdown
 6. Click on any cafe name to view full details
 
-![Browse Cafes]()
-*Add image showing the browsing interface*
-
 ### Viewing Cafe Details
 
 1. Click on a cafe name from the homepage
@@ -149,9 +158,6 @@ Cafe Finder helps you discover the best cafes across Jaipur, Delhi, and Gurgaon.
    - Location on Google Maps
 3. Click "Open in Google Maps" to navigate
 4. Scroll down to read reviews from other visitors
-
-![Cafe Details]()
-*Add image showing cafe details page*
 
 ### Submitting a Review
 
@@ -163,9 +169,6 @@ Cafe Finder helps you discover the best cafes across Jaipur, Delhi, and Gurgaon.
 5. Click "Submit Review" button
 6. Your review will appear in the list
 
-![Submit Review]()
-*Add image showing review form*
-
 ### Voting on Reviews
 
 1. Find reviews on any cafe details page
@@ -173,9 +176,6 @@ Cafe Finder helps you discover the best cafes across Jaipur, Delhi, and Gurgaon.
 3. Click 👍 **Agree** if you agree with a review
 4. Click 👎 **Disagree** if you disagree
 5. Vote counts update automatically
-
-![Vote on Reviews]()
-*Add image showing review voting*
 
 ---
 
@@ -188,9 +188,6 @@ The admin panel allows you to manage cafes without using Django's default admin 
 **URL**: `http://127.0.0.1:8000/edit/?key=my_secret_admin_key_2024`
 
 **Default Secret Key**: `my_secret_admin_key_2024`
-
-![Admin Login]()
-*Add image showing admin panel access*
 
 ### Adding a New Cafe
 
@@ -206,9 +203,6 @@ The admin panel allows you to manage cafes without using Django's default admin 
    - **Has Power Sockets**: Check if available
 4. Click "Add Cafe"
 
-![Add Cafe]()
-*Add image showing add cafe form*
-
 ### Editing a Cafe
 
 1. Access the admin panel
@@ -216,9 +210,6 @@ The admin panel allows you to manage cafes without using Django's default admin 
 3. Click the "Edit" button next to the cafe
 4. Modify any fields in the inline form
 5. Click "Save Changes" to update
-
-![Edit Cafe]()
-*Add image showing edit interface*
 
 ### Deleting a Cafe
 
