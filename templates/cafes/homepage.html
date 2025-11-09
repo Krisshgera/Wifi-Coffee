@@ -1,0 +1,158 @@
+{% extends 'cafes/base.html' %}
+
+{% block title %}Cafe Finder - Find the Best Cafes{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-12">
+        <h1 class="display-4 text-center mb-4">
+            <i class="bi bi-cup-hot"></i> Discover Great Cafes
+        </h1>
+        <p class="lead text-center text-muted">
+            Find the perfect cafe with great coffee, WiFi, and ambiance
+        </p>
+    </div>
+</div>
+
+<!-- City Selection and Filters -->
+<div class="row mb-4">
+    <div class="col-lg-8 mx-auto">
+        <div class="card">
+            <div class="card-body">
+                <form method="get" action="{% url 'homepage' %}">
+                    <div class="row g-3">
+                        <!-- City Selection -->
+                        <div class="col-md-4">
+                            <label class="form-label fw-bold">Select City</label>
+                            <select name="city" class="form-select" onchange="this.form.submit()">
+                                {% for city in cities %}
+                                    <option value="{{ city }}" {% if city == selected_city %}selected{% endif %}>
+                                        {{ city }}
+                                    </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        
+                        <!-- Search -->
+                        <div class="col-md-5">
+                            <label class="form-label fw-bold">Search Cafe</label>
+                            <input type="text" name="search" class="form-control" 
+                                   placeholder="Enter cafe name..." value="{{ search_query }}">
+                        </div>
+                        
+                        <!-- Sort -->
+                        <div class="col-md-3">
+                            <label class="form-label fw-bold">Sort By</label>
+                            <select name="sort" class="form-select" onchange="this.form.submit()">
+                                <option value="name" {% if sort_by == 'name' %}selected{% endif %}>Name</option>
+                                <option value="rating" {% if sort_by == 'rating' %}selected{% endif %}>Rating</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-3 text-end">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="bi bi-search"></i> Search
+                        </button>
+                        <a href="{% url 'homepage' %}?city={{ selected_city }}" class="btn btn-secondary">
+                            <i class="bi bi-arrow-clockwise"></i> Clear
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Cafes List -->
+<div class="row mb-3">
+    <div class="col-12">
+        <h2 class="h4 mb-3">
+            <i class="bi bi-geo-alt-fill"></i> Cafes in {{ selected_city }}
+            <span class="badge bg-secondary">{{ cafes|length }}</span>
+        </h2>
+    </div>
+</div>
+
+{% if cafes %}
+    <div class="row g-4">
+        {% for cafe in cafes %}
+            <div class="col-md-6 col-lg-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            <a href="{% url 'cafe_detail' cafe.id %}" class="text-decoration-none text-dark">
+                                {{ cafe.name }}
+                            </a>
+                        </h5>
+                        <p class="text-muted mb-3">
+                            <i class="bi bi-geo-alt"></i> {{ cafe.city }}
+                        </p>
+                        
+                        <!-- Ratings -->
+                        <div class="mb-2">
+                            <span class="text-muted">Coffee:</span>
+                            <span class="rating-badge 
+                                {% if cafe.coffee_rating >= 4.5 %}rating-excellent
+                                {% elif cafe.coffee_rating >= 3.5 %}rating-good
+                                {% elif cafe.coffee_rating >= 2.5 %}rating-average
+                                {% else %}rating-poor{% endif %}">
+                                <i class="bi bi-star-fill"></i> {{ cafe.coffee_rating }}
+                            </span>
+                        </div>
+                        
+                        <div class="mb-2">
+                            <span class="text-muted">WiFi:</span>
+                            <span class="rating-badge 
+                                {% if cafe.wifi_rating >= 4.5 %}rating-excellent
+                                {% elif cafe.wifi_rating >= 3.5 %}rating-good
+                                {% elif cafe.wifi_rating >= 2.5 %}rating-average
+                                {% else %}rating-poor{% endif %}">
+                                <i class="bi bi-wifi"></i> {{ cafe.wifi_rating }}
+                            </span>
+                        </div>
+                        
+                        <div class="mb-2">
+                            <span class="text-muted">Ambiance:</span>
+                            <span class="rating-badge 
+                                {% if cafe.ambiance_rating >= 4.5 %}rating-excellent
+                                {% elif cafe.ambiance_rating >= 3.5 %}rating-good
+                                {% elif cafe.ambiance_rating >= 2.5 %}rating-average
+                                {% else %}rating-poor{% endif %}">
+                                <i class="bi bi-stars"></i> {{ cafe.ambiance_rating }}
+                            </span>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <span class="text-muted">Power Socket:</span>
+                            {% if cafe.has_power %}
+                                <span class="badge bg-success">
+                                    <i class="bi bi-plug-fill"></i> Yes
+                                </span>
+                            {% else %}
+                                <span class="badge bg-danger">
+                                    <i class="bi bi-plug"></i> No
+                                </span>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="d-grid gap-2">
+                            <a href="{% url 'cafe_detail' cafe.id %}" class="btn btn-primary btn-sm">
+                                <i class="bi bi-info-circle"></i> View Details
+                            </a>
+                            <a href="{{ cafe.map_url }}" target="_blank" class="btn btn-outline-success btn-sm">
+                                <i class="bi bi-map"></i> Open in Maps
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% else %}
+    <div class="alert alert-info text-center">
+        <i class="bi bi-info-circle"></i> No cafes found in {{ selected_city }}.
+        {% if search_query %}Try clearing your search filters.{% endif %}
+    </div>
+{% endif %}
+{% endblock %}

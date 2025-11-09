@@ -1,0 +1,202 @@
+{% extends 'cafes/base.html' %}
+
+{% block title %}{{ cafe.name }} - Cafe Details{% endblock %}
+
+{% block content %}
+<!-- Back Button -->
+<div class="mb-3">
+    <a href="{% url 'homepage' %}?city={{ cafe.city }}" class="btn btn-secondary">
+        <i class="bi bi-arrow-left"></i> Back to List
+    </a>
+</div>
+
+<!-- Cafe Details Card -->
+<div class="row">
+    <div class="col-lg-8 mx-auto">
+        <div class="card shadow-lg mb-4">
+            <div class="card-header bg-dark text-white">
+                <h2 class="card-title mb-0">
+                    <i class="bi bi-cup-hot-fill"></i> {{ cafe.name }}
+                </h2>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <h5 class="mb-3">
+                            <i class="bi bi-geo-alt-fill text-danger"></i> Location
+                        </h5>
+                        <p class="lead">{{ cafe.city }}</p>
+                        
+                        <a href="{{ cafe.map_url }}" target="_blank" class="btn btn-success mb-4">
+                            <i class="bi bi-map"></i> Open in Google Maps
+                        </a>
+                    </div>
+                    
+                    <div class="col-md-6">
+                        <h5 class="mb-3">
+                            <i class="bi bi-plug-fill text-warning"></i> Power Socket
+                        </h5>
+                        {% if cafe.has_power %}
+                            <span class="badge bg-success fs-6">
+                                <i class="bi bi-check-circle-fill"></i> Available
+                            </span>
+                        {% else %}
+                            <span class="badge bg-danger fs-6">
+                                <i class="bi bi-x-circle-fill"></i> Not Available
+                            </span>
+                        {% endif %}
+                    </div>
+                </div>
+                
+                <hr>
+                
+                <!-- Ratings Section -->
+                <h5 class="mb-3">
+                    <i class="bi bi-star-fill text-warning"></i> Ratings
+                </h5>
+                
+                <div class="row text-center mb-3">
+                    <div class="col-md-4 mb-3">
+                        <div class="card bg-light">
+                            <div class="card-body">
+                                <h6 class="card-subtitle mb-2 text-muted">Coffee Quality</h6>
+                                <div class="display-6 
+                                    {% if cafe.coffee_rating >= 4.5 %}text-success
+                                    {% elif cafe.coffee_rating >= 3.5 %}text-primary
+                                    {% elif cafe.coffee_rating >= 2.5 %}text-warning
+                                    {% else %}text-danger{% endif %}">
+                                    {{ cafe.coffee_rating }}
+                                    <small class="fs-6">/5</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-4 mb-3">
+                        <div class="card bg-light">
+                            <div class="card-body">
+                                <h6 class="card-subtitle mb-2 text-muted">WiFi Speed</h6>
+                                <div class="display-6 
+                                    {% if cafe.wifi_rating >= 4.5 %}text-success
+                                    {% elif cafe.wifi_rating >= 3.5 %}text-primary
+                                    {% elif cafe.wifi_rating >= 2.5 %}text-warning
+                                    {% else %}text-danger{% endif %}">
+                                    {{ cafe.wifi_rating }}
+                                    <small class="fs-6">/5</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-4 mb-3">
+                        <div class="card bg-light">
+                            <div class="card-body">
+                                <h6 class="card-subtitle mb-2 text-muted">Ambiance</h6>
+                                <div class="display-6 
+                                    {% if cafe.ambiance_rating >= 4.5 %}text-success
+                                    {% elif cafe.ambiance_rating >= 3.5 %}text-primary
+                                    {% elif cafe.ambiance_rating >= 2.5 %}text-warning
+                                    {% else %}text-danger{% endif %}">
+                                    {{ cafe.ambiance_rating }}
+                                    <small class="fs-6">/5</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="alert alert-info text-center">
+                    <strong>Average Rating:</strong> 
+                    <span class="fs-5">{{ cafe.average_rating|floatformat:1 }}/5</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Review Form -->
+        <div class="card shadow mb-4">
+            <div class="card-header bg-primary text-white">
+                <h4 class="mb-0">
+                    <i class="bi bi-chat-left-text"></i> Leave a Review
+                </h4>
+            </div>
+            <div class="card-body">
+                <form method="post">
+                    {% csrf_token %}
+                    
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Email (Optional)</label>
+                        <input type="email" class="form-control" id="email" name="email" 
+                               placeholder="your.email@example.com">
+                        <small class="form-text text-muted">
+                            Leave blank for anonymous review
+                        </small>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="review_text" class="form-label">Your Review *</label>
+                        <textarea class="form-control" id="review_text" name="review_text" 
+                                  rows="4" required placeholder="Share your experience..."></textarea>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary">
+                        <i class="bi bi-send"></i> Submit Review
+                    </button>
+                </form>
+            </div>
+        </div>
+        
+        <!-- Reviews List -->
+        <div class="card shadow">
+            <div class="card-header bg-dark text-white">
+                <h4 class="mb-0">
+                    <i class="bi bi-chat-dots"></i> Reviews 
+                    <span class="badge bg-light text-dark">{{ reviews|length }}</span>
+                </h4>
+            </div>
+            <div class="card-body">
+                {% if reviews %}
+                    {% for review in reviews %}
+                        <div class="card mb-3 {% if forloop.last %}mb-0{% endif %}">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between align-items-start mb-2">
+                                    <div>
+                                        <h6 class="mb-1">
+                                            {% if review.email %}
+                                                <i class="bi bi-person-circle"></i> {{ review.email }}
+                                            {% else %}
+                                                <i class="bi bi-person"></i> Anonymous
+                                            {% endif %}
+                                        </h6>
+                                        <small class="text-muted">
+                                            <i class="bi bi-clock"></i> {{ review.created_at|date:"F d, Y - g:i A" }}
+                                        </small>
+                                    </div>
+                                </div>
+                                
+                                <p class="card-text">{{ review.text }}</p>
+                                
+                                <div class="d-flex gap-2">
+                                    <a href="{% url 'review_vote' review.id 'agree' %}" 
+                                       class="btn btn-sm btn-outline-success">
+                                        <i class="bi bi-hand-thumbs-up"></i> Agree 
+                                        <span class="badge bg-success">{{ review.agree_count }}</span>
+                                    </a>
+                                    <a href="{% url 'review_vote' review.id 'disagree' %}" 
+                                       class="btn btn-sm btn-outline-danger">
+                                        <i class="bi bi-hand-thumbs-down"></i> Disagree 
+                                        <span class="badge bg-danger">{{ review.disagree_count }}</span>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="alert alert-info text-center mb-0">
+                        <i class="bi bi-info-circle"></i> No reviews yet. Be the first to review this cafe!
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
